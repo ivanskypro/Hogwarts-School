@@ -21,9 +21,6 @@ public class StudentController {
     @GetMapping("/{id}")
     public Student getStudent(@PathVariable Long id) {
         Student student = studentService.find(id);
-        if (student == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
         return student;
     }
 
@@ -41,18 +38,16 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Student> deleteStudent (@PathVariable Long id){
-        Student deletingStudent = studentService.delete(id);
-        if (deletingStudent == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(deletingStudent);
+    public ResponseEntity deleteStudent (@PathVariable Long id){
+       studentService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping ("/print")
     public Collection<Student> pintStudents (){
         return studentService.print();
     }
+
 
     @GetMapping("/filter/{age}")
     public ResponseEntity<Collection<Student>> filter(@PathVariable Integer age) {
