@@ -50,7 +50,18 @@ public class StudentController {
 
 
     @GetMapping("/filter/{age}")
-    public ResponseEntity<Collection<Student>> filter(@PathVariable Integer age) {
-        return ResponseEntity.ok(studentService.filter(age));
+    public ResponseEntity filter(@RequestParam(required = false) Integer age,
+                                 @RequestParam(required = false) Integer min,
+                                 @RequestParam(required = false) Integer max) {
+        if (min != null && max != null) {
+            return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
+        }
+        if (age != null) {
+            return ResponseEntity.ok(studentService.filter(age));
+        }
+        return ResponseEntity.ok(studentService.print());
+
     }
 }
+
+
