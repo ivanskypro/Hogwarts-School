@@ -6,6 +6,7 @@ import ru.hogwarts.hogwartsschool.model.Student;
 import ru.hogwarts.hogwartsschool.repositories.StudentRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +45,19 @@ public class StudentService {
 
     public Collection<Student> findByAgeBetween(int min, int max) {
         return studentRepository.findByAgeBetween(min, max);
+    }
+
+    public Integer quantityOfStudents(){
+        return studentRepository.quantityOfStudents();
+    }
+
+    public Integer averageAgeOfStudents(){
+       return studentRepository.averageAgeOfStudents();
+    }
+
+    public List<Student> getLastStudents(int count) {
+        return studentRepository.getLastStudents(count);
+
     }
 
 
