@@ -1,5 +1,7 @@
 package ru.hogwarts.hogwartsschool.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.hogwartsschool.model.Faculty;
 import ru.hogwarts.hogwartsschool.repositories.FacultyRepository;
@@ -10,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class FacultyService {
 
-
+    Logger logger = LoggerFactory.getLogger(FacultyService.class);
     private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
@@ -18,30 +20,37 @@ public class FacultyService {
     }
 
     public Faculty find(long id) {
-       return facultyRepository.findById(id).get();
+       logger.info("Method for finding faculty was invoked");
+        return facultyRepository.findById(id).get();
     }
 
     public Faculty create(Faculty faculty) {
+        logger.info("Method for creating faculty was invoked");
         return facultyRepository.save(faculty);
     }
 
     public Faculty update(Faculty faculty) {
+        logger.info("Method for updating faculty was invoked");
         return facultyRepository.save(faculty);
         }
 
     public void delete(long id) {
+        logger.info("Method for deleting faculty was invoked");
         facultyRepository.deleteById(id);
     }
 
     public Collection<Faculty> print (){
+        logger.info("Method for printing faculty was invoked");
         return facultyRepository.findAll();
     }
 
     public Collection<Faculty> filterByColor (String color) {
+        logger.info("Method for filtering faculty by color was invoked");
         return facultyRepository.findByColorIgnoreCase(color);
     }
 
     public Collection<Faculty> filterByName(String name) {
+        logger.info("Method for filtering faculty by name was invoked");
         return facultyRepository.findFacultiesByNameIgnoreCase(name);
     }
 
