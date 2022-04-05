@@ -1,5 +1,6 @@
 package ru.hogwarts.hogwartsschool.service;
 
+import liquibase.pro.packaged.F;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,8 @@ import ru.hogwarts.hogwartsschool.model.Faculty;
 import ru.hogwarts.hogwartsschool.repositories.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +55,15 @@ public class FacultyService {
     public Collection<Faculty> filterByName(String name) {
         logger.info("Method for filtering faculty by name was invoked");
         return facultyRepository.findFacultiesByNameIgnoreCase(name);
+    }
+
+    public String getTheLongestFacultyName(){
+        logger.info("Method for finding the longest faculty name was invoked");
+        List<Faculty> allFaculties = facultyRepository.findAll();
+        return allFaculties.stream().
+                parallel().
+                reduce((a,b)->a.getName().length() > b.getName().length() ? a:b).
+                toString();
     }
 
 }

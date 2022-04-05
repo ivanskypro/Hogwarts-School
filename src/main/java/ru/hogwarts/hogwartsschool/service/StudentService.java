@@ -2,16 +2,14 @@ package ru.hogwarts.hogwartsschool.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.hogwarts.hogwartsschool.model.Student;
 import ru.hogwarts.hogwartsschool.repositories.StudentRepository;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -64,15 +62,49 @@ public class StudentService {
         return studentRepository.quantityOfStudents();
     }
 
-    public Integer averageAgeOfStudents(){
-        logger.info("Method for counting average students' age was invoked");
-        return studentRepository.averageAgeOfStudents();
-    }
+    //public Integer averageAgeOfStudents(){
+    //    logger.info("Method for counting average students' age was invoked");
+    //    return studentRepository.averageAgeOfStudents();
+    //}
 
     public List<Student> getLastStudents(int count) {
         logger.info("Method for finding last students was invoked");
         return studentRepository.getLastStudents(count);
     }
+
+    public List<String> getStudentsWithFirstALetter (){
+        logger.info("Method for finding students with first A letter in the name was invoked");
+        List<Student> allStudents = studentRepository.findAll();
+
+        return allStudents.stream().
+                parallel().
+                map(Student::getName).
+                filter(e->e.startsWith("A")).
+                sorted().
+                collect(Collectors.toList());
+    }
+
+    public double getAverageAgeOfStudents(){
+        logger.info("Method for finding average students' age was invoked");
+        List<Student> allStudents = studentRepository.findAll();
+        return allStudents.stream().
+                mapToDouble(Student::getAge).
+                average().orElse(0.0);
+    }
+
+    public int getNumber(){
+        logger.info("Method for getting some number was invoked");
+        long start = System.currentTimeMillis();
+        int sum = Stream.
+                iterate(1, a -> a +1).
+                limit(1_000_000).
+                parallel().
+                reduce(0, (a, b) -> a + b );
+        System.out.println(System.currentTimeMillis() - start);
+        return sum;
+
+    }
+
 
 
 }
