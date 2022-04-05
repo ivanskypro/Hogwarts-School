@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.hogwarts.hogwartsschool.model.Faculty;
 
 import java.util.Collection;
+
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
 

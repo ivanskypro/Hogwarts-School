@@ -21,15 +21,13 @@ import ru.hogwarts.hogwartsschool.service.FacultyService;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest (controllers = FacultyController.class)
 public class FacultyControllerTests {
 
     private Faculty faculty;
@@ -83,6 +81,8 @@ public class FacultyControllerTests {
 
     @Test
     void createFacultyTest() throws Exception {
+
+
         when(facultyRepository.save(any(Faculty.class))).thenReturn(faculty);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -148,18 +148,5 @@ public class FacultyControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").isNotEmpty());
     }
 
-    @Test
-    void findFacultyByNameAndColor() throws Exception {
-        when(facultyRepository.findByColorIgnoreCase(anyString(), anyString())).thenReturn((List<Faculty>) facultyList);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/faculty/params/?color=" + "yellow" + "&name=" + "Unknown Faculty1")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*]").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").isNotEmpty())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].name").isNotEmpty())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[*].color").isNotEmpty());
-    }
 
 }
