@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 public class StudentService {
 
     Logger logger = LoggerFactory.getLogger(StudentService.class);
+    public Integer count = 0;
 
     private final StudentRepository studentRepository;
 
@@ -102,9 +103,47 @@ public class StudentService {
                 reduce(0, (a, b) -> a + b );
         System.out.println(System.currentTimeMillis() - start);
         return sum;
-
     }
 
+    public void getThread() {
+        List<Student> allStudents = studentRepository.findAll();
 
+        System.out.println("основной поток: "+allStudents.get(0)+count++);
+        System.out.println("основной поток: "+allStudents.get(1)+count++);
 
+        new Thread(()->{
+            System.out.println("первый параллельный поток: "+ allStudents.get(2)+count++);
+            System.out.println("первый параллельный поток: "+ allStudents.get(3)+count++);
+        }).start();
+
+        new Thread(()->{
+            System.out.println("второй параллельный поток: "+ allStudents.get(4)+count++);
+            System.out.println("второй параллельный поток: "+ allStudents.get(5)+count++);
+        }).start();
+    }
+
+    public void getSynchronizedStudents() {
+        List<Student> allStudents = studentRepository.findAll();
+
+        System.out.println("основной поток: "+allStudents.get(0)+count++);
+        System.out.println("основной поток: "+allStudents.get(1)+count++);
+
+        new Thread(){
+            @Override
+            public void run(){
+                synchronized (allStudents) {
+                    System.out.println("первый синхронизированный параллельный поток: " + allStudents.get(2)+count++);
+                    System.out.println("первый синхронизированный параллельный поток: " + allStudents.get(3)+count++);
+                } }
+        }.start();
+
+        new Thread(){
+            @Override
+            public void run(){
+                synchronized (allStudents) {
+                    System.out.println("второй синхронизированный параллельный поток: " + allStudents.get(4)+count++);
+                    System.out.println("второй синхронизированный параллельный поток: " + allStudents.get(5)+count++);
+                }}
+        }.start();
+    }
 }

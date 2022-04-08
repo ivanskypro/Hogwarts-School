@@ -92,6 +92,20 @@ public class StudentController {
     public int getNumber(){
         return studentService.getNumber();
     }
+
+    @GetMapping("/thread")
+    public void getStudents(){
+        studentService.getThread();
+    }
+
+    @GetMapping("/synchronizedThread")
+    public void getSynchronizedStudents(){
+        studentService.getSynchronizedStudents();
+    }
+
+
+
+
 }
 
 
